@@ -28,3 +28,4 @@ Specify element-specific value or text field names for different use cases;
 There are plenty of additional features that should be made easily accessible without interfering with the simplicity of use.
 
  - ability to pass params to API via a _depends on_ attribute
+ - optional style options with a flexible stylesheet
