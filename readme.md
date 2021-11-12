@@ -25,6 +25,6 @@ Specify element-specific value or text field names for different use cases;
 
 ### Tasks
 
-There are plenty of additional features that should be made easily accessibly without interfering with the simplicity of use.
+There are plenty of additional features that should be made easily accessible without interfering with the simplicity of use.
 
  - ability to pass params to API via a _depends on_ attribute
