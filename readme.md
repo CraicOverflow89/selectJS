@@ -22,3 +22,9 @@ Specify element-specific value or text field names for different use cases;
 ```html
 <select id="posts" class="selectJS" data-placeholder="Select a post..." data-url="https://jsonplaceholder.typicode.com/posts" data-fieldtext="title" data-fieldvalue="id"></select>
 ```
+
+### Tasks
+
+There are plenty of additional features that should be made easily accessibly without interfering with the simplicity of use.
+
+ - ability to pass params to API via a _depends on_ attribute
