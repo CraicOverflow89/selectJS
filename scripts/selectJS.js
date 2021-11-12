@@ -14,7 +14,7 @@ window.selectJS = (function() {
 		"setFields": (value, text) => {
 			config.fields.value = value;
 			config.fields.text = text;
-			return Proxy;
+			return proxy;
 		}
 	};
 
