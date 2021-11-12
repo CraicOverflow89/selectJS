@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Select JS</title>
+		<script src="scripts/selectJS.js"></script>
+		<script>
+			window.selectJS.setFields("id", "name");
+		</script>
+	</head>
+	<body>
+		<h2>Select JS Demo</h2>
+		<table width="100%">
+			<tr>
+				<td width="160">User</td>
+				<td width="*">
+					<select id="users" class="selectJS" data-placeholder="Select a user..." data-url="https://jsonplaceholder.typicode.com/users"></select>
+				</td>
+			</tr>
+			<tr>
+				<td>Posts</td>
+				<td>
+					<select id="posts" class="selectJS" data-placeholder="Select a post..." data-url="https://jsonplaceholder.typicode.com/posts" data-fieldtext="title"></select>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>
