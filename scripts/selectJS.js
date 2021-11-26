@@ -20,8 +20,7 @@ window.selectJS = (function() {
 
 	// Ready Logic
 	document.addEventListener("DOMContentLoaded", (event) => {
-		const elementList = [...document.getElementsByClassName("selectJS")];
-		elementList.forEach((element) => {
+		[...document.getElementsByClassName("selectJS")].forEach((element) => {
 			element.append(new Option(element.dataset.hasOwnProperty("placeholder")
 				? element.dataset["placeholder"]
 				: "Select...",
@@ -43,16 +42,23 @@ window.selectJS = (function() {
 				request.open("GET", element.dataset["url"]);
 				request.onload = () => {
 					const data = JSON.parse(request.response);
-					// NOTE: throw if data not an array?
+					if(!Array.isArray(data)) {
+						console.log("Data has invalid format");
+						return;
+					}
 					data.forEach((option) => {
-						if(!option.hasOwnProperty(fieldValue) || !option.hasOwnProperty(fieldText)) {
+						if(!option.hasOwnProperty(fieldValue)) {
+							console.log("Data has no " + fieldValue + " property for value");
 							return;
-							// NOTE: throw?
+						}
+						if(!option.hasOwnProperty(fieldText)) {
+							console.log("Data has no " + fieldText + " property for text");
+							return;
 						}
 						element.append(new Option(option[fieldText], option[fieldValue]));
 					});
 				}
-				request.onerror = () => console.log("onerror");
+				request.onerror = () => console.log("Encountered an error fetching data");
 				request.send();
 			});
 		})
