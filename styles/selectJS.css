@@ -1,0 +1,9 @@
+select.selectJS {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+select.selectJS::-ms-expand {
+    display: none;
+}
