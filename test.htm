@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+    <head>
+        <title>Select JS</title>
+        <script>
+
+            document.addEventListener("DOMContentLoaded", (event) => {
+		        [...document.getElementsByClassName("selectJS")].forEach((element) => {
+                    let cellExpand;
+                    let isExpanded = false;
+                    const actionExpand = () => {
+                        isExpanded = !isExpanded;
+                        cellExpand.innerHTML = isExpanded ? "&#8593;" : "&#8595;";
+                    };
+                    element.className = "selectJS-hidden";
+                    element.parentNode.append((() => {
+                        const container = document.createElement("div");
+                        container.className = "selectJS-container";
+                        container.append((() => {
+                            const table = document.createElement("table");
+                            table.append((() => {
+                                const tbody = document.createElement("tbody");
+                                tbody.append((() => {
+                                    const tr = document.createElement("tr");
+                                    tr.append((() => {
+                                        const td = document.createElement("td");
+                                        td.innerHTML = "Selected Option Text";
+                                        return td;
+                                    })());
+                                    tr.append((() => {
+                                        cellExpand = document.createElement("td");
+                                        cellExpand.innerHTML = "&#8595;";
+                                        cellExpand.addEventListener("click", actionExpand);
+                                        return cellExpand;
+                                    })());
+                                    return tr;
+                                })());
+                                return tbody;
+                            })());
+                            return table;
+                        })());
+                        return container;
+                    })());
+                });
+            });
+
+        </script>
+        <style>
+
+            .selectJS-hidden {
+                display: none;
+            }
+
+            div.selectJS-container {
+                background-color: rgba(0, 0, 0, 0);
+                border: 1px solid rgb(0, 0, 0, 0);
+                cursor: default;
+                height: 24px;
+                user-select: none;
+                width: 200px;
+            }
+
+            div.selectJS-container > table {
+                background-color: rgba(0, 0, 0, 0.1);
+                border: 1px solid rgb(0, 0, 0, 1);
+                border-collapse: collapse;
+                height: 100%;
+                margin: 0px;
+                padding: 0px;
+                width: 100%;
+            }
+
+            div.selectJS-container > table > tbody > tr > td {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                text-align: center;
+                vertical-align: middle;
+            }
+
+            div.selectJS-container > table > tbody > tr > td:nth-child(2) {
+                width: 24px;
+            }
+
+        </style>
+    </head>
+    <body>
+        <!--<div class="selectJS-container">
+            <table>
+                <tr>
+                    <td>Selected Option Text</td>
+                    <td>v</td>
+                </tr>
+            </table>
+        </div>-->
+        <select class="selectJS"></select>
+    </body>
+</html>
