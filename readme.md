@@ -29,3 +29,4 @@ There are plenty of additional features that should be made easily accessible wi
 
  - ability to pass params to API via a _depends on_ attribute
  - optional style options with a flexible stylesheet
+ - optional fetch on page load for size? (or sizing strategy of grow vs trim larger te...)
