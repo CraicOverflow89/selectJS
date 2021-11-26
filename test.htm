@@ -5,41 +5,35 @@
 
             document.addEventListener("DOMContentLoaded", (event) => {
 		        [...document.getElementsByClassName("selectJS")].forEach((element) => {
+                    let elementCreate = (tag, logic) => {
+                        const element = document.createElement(tag);
+                        logic(element);
+                        return element;
+                    };
                     let cellExpand;
                     let isExpanded = false;
                     const actionExpand = () => {
                         isExpanded = !isExpanded;
-                        cellExpand.innerHTML = isExpanded ? "&#8593;" : "&#8595;";
+                        cellExpand.innerHTML = isExpanded ? "&#8743;" : "&#8744;";
                     };
                     element.className = "selectJS-hidden";
-                    element.parentNode.append((() => {
-                        const container = document.createElement("div");
+                    element.parentNode.append(elementCreate("div", (container) => {
                         container.className = "selectJS-container";
-                        container.append((() => {
-                            const table = document.createElement("table");
-                            table.append((() => {
-                                const tbody = document.createElement("tbody");
-                                tbody.append((() => {
-                                    const tr = document.createElement("tr");
-                                    tr.append((() => {
-                                        const td = document.createElement("td");
+                        container.append(elementCreate("table", (table) => {
+                            table.append(elementCreate("tbody", (tbody) => {
+                                tbody.append(elementCreate("tr", (tr) => {
+                                    tr.append(elementCreate("td", (td) => {
                                         td.innerHTML = "Selected Option Text";
-                                        return td;
-                                    })());
-                                    tr.append((() => {
-                                        cellExpand = document.createElement("td");
-                                        cellExpand.innerHTML = "&#8595;";
-                                        cellExpand.addEventListener("click", actionExpand);
-                                        return cellExpand;
-                                    })());
-                                    return tr;
-                                })());
-                                return tbody;
-                            })());
-                            return table;
-                        })());
-                        return container;
-                    })());
+                                    }));
+                                    cellExpand = elementCreate("td", (td) => {
+                                        td.innerHTML = "&#8744;";
+                                        td.addEventListener("click", actionExpand);
+                                    });
+                                    tr.append(cellExpand);
+                                }));
+                            }));
+                        }));
+                    }));
                 });
             });
 
@@ -76,6 +70,7 @@
             }
 
             div.selectJS-container > table > tbody > tr > td:nth-child(2) {
+                vertical-align: top;
                 width: 24px;
             }
 
