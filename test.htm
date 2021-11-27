@@ -4,22 +4,23 @@
         <script>
 
             document.addEventListener("DOMContentLoaded", (event) => {
+                const create = (tag, data = {}, logic = null) => {
+                    const element = document.createElement(tag);
+                    for(const [key, value] of Object.entries(data)) {
+                        element[key] = value;
+                    }
+                    if(logic !== null) {
+                        logic(element);
+                    }
+                    return element;
+                };
 		        [...document.getElementsByClassName("selectJS")].forEach((element) => {
-                    const create = (tag, data = {}, logic = null) => {
-                        const element = document.createElement(tag);
-                        for(const [key, value] of Object.entries(data)) {
-                            element[key] = value;
-                        }
-                        if(logic !== null) {
-                            logic(element);
-                        }
-                        return element;
-                    };
                     let cellExpand, divContainer, divOptions;
                     let isExpanded = false;
                     const actionExpand = () => {
                         isExpanded = !isExpanded;
                         cellExpand.innerHTML = isExpanded ? "&#8743;" : "&#8744;";
+                        divOptions.setAttribute("style", "display: " + (isExpanded ? "inline" : "hidden"));
                     };
                     divContainer = create("div", {
                         "className": "selectJS-div selectJS-selection"
@@ -42,6 +43,16 @@
                     });
                     divOptions = create("div", {
                         "className": "selectJS-div selectJS-options"
+                    }, (options) => {
+                        options.append(create("table", {}, (table) => {
+                            table.append(create("tbody", {}, (tbody) => {
+                                tbody.append(create("tr", {}, (tr) => {
+                                    tr.append(create("td", {
+                                        "innerHTML": "Test Option"
+                                    }));
+                                }));
+                            }));
+                        }));
                     });
                     element.className = "selectJS-hidden";
                     element.parentNode.append(divContainer);
@@ -66,6 +77,23 @@
                 width: 200px;
             }
 
+            div.selectJS-div > table {
+                background-color: rgba(0, 0, 0, 0.1);
+                border: 1px solid rgb(0, 0, 0, 1);
+                border-collapse: collapse;
+                height: 100%;
+                margin: 0px;
+                padding: 0px;
+                width: 100%;
+            }
+
+            div.selectJS-div > table > tbody > tr > td {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                text-align: left;
+                padding-left: 5px;
+                vertical-align: middle;
+            }
+
             div.selectJS-options {
                 display: none;
                 height: 24px;
@@ -77,23 +105,8 @@
                 height: 24px;
             }
 
-            div.selectJS-selection > table {
-                background-color: rgba(0, 0, 0, 0.1);
-                border: 1px solid rgb(0, 0, 0, 1);
-                border-collapse: collapse;
-                height: 100%;
-                margin: 0px;
-                padding: 0px;
-                width: 100%;
-            }
-
-            div.selectJS-selection > table > tbody > tr > td {
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                text-align: center;
-                vertical-align: middle;
-            }
-
             div.selectJS-selection > table > tbody > tr > td:nth-child(2) {
+                text-align: center;
                 vertical-align: top;
                 width: 24px;
             }
@@ -101,6 +114,6 @@
         </style>
     </head>
     <body>
-        <select class="selectJS"></select>
+        <select class="selectJS" data-url="https://jsonplaceholder.typicode.com/users"></select>
     </body>
 </html>
