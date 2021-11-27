@@ -5,35 +5,47 @@
 
             document.addEventListener("DOMContentLoaded", (event) => {
 		        [...document.getElementsByClassName("selectJS")].forEach((element) => {
-                    let elementCreate = (tag, logic) => {
+                    const create = (tag, data = {}, logic = null) => {
                         const element = document.createElement(tag);
-                        logic(element);
+                        for(const [key, value] of Object.entries(data)) {
+                            element[key] = value;
+                        }
+                        if(logic !== null) {
+                            logic(element);
+                        }
                         return element;
                     };
-                    let cellExpand;
+                    let cellExpand, divContainer, divOptions;
                     let isExpanded = false;
                     const actionExpand = () => {
                         isExpanded = !isExpanded;
                         cellExpand.innerHTML = isExpanded ? "&#8743;" : "&#8744;";
                     };
-                    element.className = "selectJS-hidden";
-                    element.parentNode.append(elementCreate("div", (container) => {
-                        container.className = "selectJS-container";
-                        container.append(elementCreate("table", (table) => {
-                            table.append(elementCreate("tbody", (tbody) => {
-                                tbody.append(elementCreate("tr", (tr) => {
-                                    tr.append(elementCreate("td", (td) => {
-                                        td.innerHTML = "Selected Option Text";
+                    divContainer = create("div", {
+                        "className": "selectJS-div selectJS-selection"
+                    }, (container) => {
+                        container.append(create("table", {}, (table) => {
+                            table.append(create("tbody", {}, (tbody) => {
+                                tbody.append(create("tr", {}, (tr) => {
+                                    tr.append(create("td", {
+                                        "innerHTML": "Selected Option Text"
                                     }));
-                                    cellExpand = elementCreate("td", (td) => {
-                                        td.innerHTML = "&#8744;";
+                                    cellExpand = create("td", {
+                                        "innerHTML": "&#8744;"
+                                    }, (td) => {
                                         td.addEventListener("click", actionExpand);
                                     });
                                     tr.append(cellExpand);
                                 }));
                             }));
                         }));
-                    }));
+                    });
+                    divOptions = create("div", {
+                        "className": "selectJS-div selectJS-options"
+                    });
+                    element.className = "selectJS-hidden";
+                    element.parentNode.append(divContainer);
+                    element.parentNode.insertBefore(divOptions, null);
                     // TODO: also need to create an initially hidden option container to show/hide
                     //       with position relativer to this and z-index
                 });
@@ -46,16 +58,26 @@
                 display: none;
             }
 
-            div.selectJS-container {
+            div.selectJS-div {
                 background-color: rgba(0, 0, 0, 0);
                 border: 1px solid rgb(0, 0, 0, 0);
                 cursor: default;
-                height: 24px;
                 user-select: none;
                 width: 200px;
             }
 
-            div.selectJS-container > table {
+            div.selectJS-options {
+                display: none;
+                height: 24px;
+                position: fixed;
+                z-index: 1;
+            }
+
+            div.selectJS-selection {
+                height: 24px;
+            }
+
+            div.selectJS-selection > table {
                 background-color: rgba(0, 0, 0, 0.1);
                 border: 1px solid rgb(0, 0, 0, 1);
                 border-collapse: collapse;
@@ -65,13 +87,13 @@
                 width: 100%;
             }
 
-            div.selectJS-container > table > tbody > tr > td {
+            div.selectJS-selection > table > tbody > tr > td {
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
                 text-align: center;
                 vertical-align: middle;
             }
 
-            div.selectJS-container > table > tbody > tr > td:nth-child(2) {
+            div.selectJS-selection > table > tbody > tr > td:nth-child(2) {
                 vertical-align: top;
                 width: 24px;
             }
@@ -79,14 +101,6 @@
         </style>
     </head>
     <body>
-        <!--<div class="selectJS-container">
-            <table>
-                <tr>
-                    <td>Selected Option Text</td>
-                    <td>v</td>
-                </tr>
-            </table>
-        </div>-->
         <select class="selectJS"></select>
     </body>
 </html>
