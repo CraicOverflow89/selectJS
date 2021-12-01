@@ -14,13 +14,38 @@
                     }
                     return element;
                 };
+                const elementOffset = (element) => {
+                    if(!element.getClientRects().length) {
+                        return {
+                            'bottom': 0,
+                            'left'  : 0,
+                            'right' : 0,
+                            'top'   : 0
+                        };
+                    }
+                    const rect = element.getBoundingClientRect();
+                    const win = element.ownerDocument.defaultView;
+                    const result = {
+                        'left'  : rect.left + win.pageXOffset,
+                        'top'   : rect.top + win.pageYOffset
+                    };
+                    result['bottom'] = result['top'] + element.clientHeight;
+                    result['right'] = result['left'] + element.clientWidth;
+                    // NOTE: seemed to be off when using offsetHeight (need to test more)
+                    return result;
+                };
 		        [...document.getElementsByClassName("selectJS")].forEach((element) => {
                     let cellExpand, divContainer, divOptions;
                     let isExpanded = false;
                     const actionExpand = () => {
                         isExpanded = !isExpanded;
                         cellExpand.innerHTML = isExpanded ? "&#8743;" : "&#8744;";
-                        divOptions.setAttribute("style", "display: " + (isExpanded ? "inline" : "hidden"));
+                        if(isExpanded) {
+                            const offset = elementOffset(divContainer);
+                            divOptions.style.left = offset.left + 'px';
+                            divOptions.style.top = (offset.bottom - 1) + 'px';
+                        }
+                        divOptions.style.display = isExpanded ? "inline" : "none";
                     };
                     divContainer = create("div", {
                         "className": "selectJS-div selectJS-selection"
@@ -57,8 +82,6 @@
                     element.className = "selectJS-hidden";
                     element.parentNode.append(divContainer);
                     element.parentNode.insertBefore(divOptions, null);
-                    // TODO: also need to create an initially hidden option container to show/hide
-                    //       with position relativer to this and z-index
                 });
             });
 
@@ -74,17 +97,20 @@
                 border: 1px solid rgb(0, 0, 0, 0);
                 cursor: default;
                 user-select: none;
-                width: 200px;
+                width: 240px;
             }
 
             div.selectJS-div > table {
-                background-color: rgba(0, 0, 0, 0.1);
                 border: 1px solid rgb(0, 0, 0, 1);
                 border-collapse: collapse;
                 height: 100%;
                 margin: 0px;
                 padding: 0px;
                 width: 100%;
+            }
+
+            div.selectJS-div > table > tbody > tr {
+                background-color: rgba(0, 0, 0, 0.2);
             }
 
             div.selectJS-div > table > tbody > tr > td {
@@ -99,6 +125,10 @@
                 height: 24px;
                 position: fixed;
                 z-index: 1;
+            }
+
+            div.selectJS-options > table > tbody > tr:hover {
+                background-color: rgba(0, 0, 0, 0.1);
             }
 
             div.selectJS-selection {
