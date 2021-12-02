@@ -35,8 +35,16 @@
                     return result;
                 };
 		        [...document.getElementsByClassName("selectJS")].forEach((element) => {
-                    let cellExpand, divContainer, divOptions;
+                    let cellExpand, divContainer, divOptions, tbodyOptions;
                     let isExpanded = false;
+                    const appendOption = (value, text) => {
+                        tbodyOptions.append(create("tr", {}, (tr) => {
+                            tr.append(create("td", {
+                                "innerHTML": text
+                            }));
+                        }));
+                    };
+                    const clearOptions = () => tbodyOptions.innerHTML = "";
                     const actionExpand = () => {
                         isExpanded = !isExpanded;
                         cellExpand.innerHTML = isExpanded ? "&#8743;" : "&#8744;";
@@ -44,6 +52,10 @@
                             const offset = elementOffset(divContainer);
                             divOptions.style.left = offset.left + 'px';
                             divOptions.style.top = (offset.bottom - 1) + 'px';
+                            clearOptions();
+                            appendOption("", "Example Option One");
+                            appendOption("", "Example Option Two");
+                            appendOption("", "Example Option Three");
                         }
                         divOptions.style.display = isExpanded ? "inline" : "none";
                     };
@@ -70,13 +82,7 @@
                         "className": "selectJS-div selectJS-options"
                     }, (options) => {
                         options.append(create("table", {}, (table) => {
-                            table.append(create("tbody", {}, (tbody) => {
-                                tbody.append(create("tr", {}, (tr) => {
-                                    tr.append(create("td", {
-                                        "innerHTML": "Test Option"
-                                    }));
-                                }));
-                            }));
+                            table.append(tbodyOptions = create("tbody", {}));
                         }));
                     });
                     element.className = "selectJS-hidden";
