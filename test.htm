@@ -35,18 +35,26 @@
                     return result;
                 };
 		        [...document.getElementsByClassName("selectJS")].forEach((element) => {
-                    let cellExpand, divContainer, divOptions, tbodyOptions;
+                    let activeValue = null;
+                    let cellExpand, divContainer, divOptions, tbodyOptions, tdSelection;
                     let isExpanded = false;
+                    const changeOption = (value, text) => {
+                        activeValue = value;
+                        tdSelection.innerHTML = text;
+                        actionExpand(null, false);
+                    };
                     const appendOption = (value, text) => {
                         tbodyOptions.append(create("tr", {}, (tr) => {
                             tr.append(create("td", {
                                 "innerHTML": text
+                            }, (tr) => {
+                                tr.addEventListener("click", () => changeOption(value, text));
                             }));
                         }));
                     };
                     const clearOptions = () => tbodyOptions.innerHTML = "";
-                    const actionExpand = () => {
-                        isExpanded = !isExpanded;
+                    const actionExpand = (event, force) => {
+                        isExpanded = typeof force !== "undefined" ? force : !isExpanded;
                         cellExpand.innerHTML = isExpanded ? "&#8743;" : "&#8744;";
                         if(isExpanded) {
                             const offset = elementOffset(divContainer);
@@ -65,8 +73,10 @@
                         container.append(create("table", {}, (table) => {
                             table.append(create("tbody", {}, (tbody) => {
                                 tbody.append(create("tr", {}, (tr) => {
-                                    tr.append(create("td", {
-                                        "innerHTML": "Selected Option Text"
+                                    tr.append(tdSelection = create("td", {
+                                        "innerHTML": "Please Select..."
+                                    }, (td) => {
+                                        td.addEventListener("click", actionExpand);
                                     }));
                                     cellExpand = create("td", {
                                         "innerHTML": "&#8744;"
